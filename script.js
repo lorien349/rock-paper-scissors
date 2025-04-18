@@ -1,8 +1,7 @@
 // Game's variables
-let playerChoice = undefined;
+let playerChoice = null;
 let computerChoice = undefined;
 let winner = undefined;
-let isFirstRound = true;
 
 // Colors
 const LIME_COLOR = "#3DFE84";
@@ -84,8 +83,6 @@ assignPlayerChoice = function(button) {
 
             break;
     }
-
-    console.log(playerChoice);
 };
 
 assignComputerChoice = function() {
@@ -98,12 +95,53 @@ assignComputerChoice = function() {
     } else if (randomNum > 0.6 && randomNum <= 1) {
         computerChoice = "scissors";
     }
-
-    console.log(computerChoice);
 };
 
-playRound = function(playerChoice, computerChoice = assignComputerChoice()) {
-    
+playRound = function() {
+    if (playerChoice == null) {
+        winner = null
+    } else if (computerChoice == playerChoice) {
+        winner = undefined;
+    } else {
+        if (computerChoice == "rock") {
+            if (playerChoice == "paper") {
+                winner = "player";
+            } else if (playerChoice == "scissors") {
+                winner = "computer";
+            }
+        } else if (computerChoice == "paper") {
+            if (playerChoice == "rock") {
+                winner = "computer";
+            } else if (playerChoice == "scissors") {
+                winner = "player";
+            }
+        } else if (computerChoice == "scissors") {
+            if (playerChoice == "rock") {
+                winner = "player";
+            } else if (playerChoice = "paper") {
+                winner = "computer";
+            }
+        }
+    }
+
+    switch(winner) {
+        case null:
+            wonLostText.style.color = YELLOW_COLOR;
+            wonLostText.textContent = "Select an option";
+            break;
+        case undefined:
+            wonLostText.style.color = YELLOW_COLOR;
+            wonLostText.textContent = "Draw";
+            break;
+        case "player":
+            wonLostText.style.color = GREEN_COLOR;
+            wonLostText.textContent = "You won!"
+            break;
+        case "computer":
+            wonLostText.style.color = RED_COLOR;
+            wonLostText.textContent = "You lost!"
+            break;
+    }
 };
 
 
@@ -114,4 +152,7 @@ allOptionsContainer.addEventListener("click", function(event) {
     assignPlayerChoice(button);
 });
 
-playButton.addEventListener("click", () => console.log("Hello World"));
+playButton.addEventListener("click", function() {
+    assignComputerChoice();
+    playRound();
+});
